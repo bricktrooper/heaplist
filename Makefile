@@ -4,11 +4,21 @@ CFLAGS += -Wall
 CFLAGS += -Wpedantic
 CFLAGS += -std=c99
 
-test: heaplist.o test.c
-	$(CC) $(CFLAGS) heaplist.o test.c -o test
-
 heaplist.o: heaplist.c heaplist.h
-	$(CC) $(CFLAGS) -c heaplist.c
+	@echo CC heaplist.c
+	@$(CC) $(CFLAGS) -c heaplist.c
+
+test.o: test.c heaplist.h
+	@echo CC test.c
+	@$(CC) $(CFLAGS) -c test.c
+
+test: heaplist.o test.o
+	@echo LD heaplist.o
+	@echo LD test.o
+	@$(CC) $(CFLAGS) heaplist.o test.c -o test
 
 clean:
-	rm -rf *.o test
+	@echo RM heaplist.o
+	@echo RM test.o
+	@echo RM test
+	@rm -rf *.o test

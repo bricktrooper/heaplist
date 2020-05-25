@@ -25,15 +25,15 @@ static int heaplist_append(HeapList * list, void * data);
 static int heaplist_remove(HeapList * list, void * data);
 static int heaplist_clear(HeapList * list);
 
-int heaplist_print(HeapList * list);
-
 HeapList * newlist(void)
 {
 	HeapList * list = malloc(sizeof(HeapList));
 
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Failed to allocate memory for list\n", __func__);
+#endif
 		return NULL;
 	}
 
@@ -45,7 +45,9 @@ void * allocate(HeapList * list, size_t size)
 {
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List handle is null\n", __func__);
+#endif
 		return NULL;
 	}
 
@@ -53,13 +55,17 @@ void * allocate(HeapList * list, size_t size)
 
 	if (data == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Failed to allocate memory for data\n", __func__);
+#endif
 		return NULL;
 	}
 
 	if (heaplist_append(list, data) == ERROR)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Failed to add data to list\n", __func__);
+#endif
 		free(data);
 		return NULL;
 	}
@@ -76,13 +82,17 @@ int deallocate(HeapList * list, void * data)
 
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
 	if (heaplist_remove(list, data) == ERROR)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Failed to remove data from list\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -106,7 +116,9 @@ static int heaplist_init(HeapList * list)
 {
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -120,7 +132,9 @@ static int heaplist_is_empty(HeapList * list)
 {
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -131,7 +145,9 @@ static int heaplist_append(HeapList * list, void * data)
 {
 	if (data == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Data handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -139,7 +155,9 @@ static int heaplist_append(HeapList * list, void * data)
 
 	if (node == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Failed to allocate memory for data node\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -165,18 +183,21 @@ static int heaplist_remove(HeapList * list, void * data)
 {
 	if (heaplist_is_empty(list))
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List is empty\n", __func__);
+#endif
 		return ERROR;
 	}
 
 	if (data == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): Data handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
 	Node * target = NULL;
-	printf("target %p %d \n", data, list->size);
 
 	if (list->head->data == data)
 	{
@@ -205,7 +226,9 @@ static int heaplist_remove(HeapList * list, void * data)
 		current = current->next;
 	}
 
+#ifdef HEAPLIST_ERROR_MSG
 	printf("%s(): Data entry '%p' not found\n", __func__, data);
+#endif
 	return ERROR;
 }
 
@@ -213,7 +236,9 @@ static int heaplist_clear(HeapList * list)
 {
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -234,11 +259,14 @@ static int heaplist_clear(HeapList * list)
 	return SUCCESS;
 }
 
+#ifdef HEAPLIST_DEBUG
 int heaplist_print(HeapList * list)
 {
 	if (list == NULL)
 	{
+#ifdef HEAPLIST_ERROR_MSG
 		printf("%s(): List handle is null\n", __func__);
+#endif
 		return ERROR;
 	}
 
@@ -267,3 +295,4 @@ int heaplist_print(HeapList * list)
 	printf("%s(): --------------------\n", __func__);
 	return SUCCESS;
 }
+#endif
